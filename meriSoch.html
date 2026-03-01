@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ehsaas - Khud Ko Jeena</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Noto+Serif+Devanagari:wght@400;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #fdfcfb;
+            color: #2d3436;
+            position: relative;
+            min-height: 100vh;
+        }
+        
+        .serif-font {
+            font-family: 'Noto Serif Devanagari', serif;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(230, 230, 230, 1);
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #2d3436 0%, #636e72 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Author Tag Style */
+        .author-tag {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            font-size: 12px;
+            color: #94a3b8;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            font-weight: 600;
+            pointer-events: none;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center p-4 md:p-8 pb-20">
+
+    <!-- Author Name in Corner -->
+    <div class="author-tag serif-font">
+        By: Bikku Kushwaha
+    </div>
+
+    <!-- Header Section -->
+    <header class="w-full max-w-2xl text-center mb-12">
+        <h1 class="text-5xl font-bold mb-3 serif-font gradient-text">Ehsaas</h1>
+        <p class="text-slate-500 font-light tracking-wide italic">"Sab kuch bas sochne ki baat hai, asal mein toh khud ko jeena hai."</p>
+    </header>
+
+    <main class="w-full max-w-2xl space-y-8">
+        
+        <!-- Input Section -->
+        <div class="glass-card p-8 rounded-3xl shadow-sm border-t-4 border-slate-700">
+            <h2 class="text-xl font-semibold mb-6 flex items-center serif-font">
+                <span class="mr-3 text-2xl">🌿</span> Aaj Ki Zindagi
+            </h2>
+            <div class="space-y-5">
+                <div>
+                    <label class="block text-sm font-medium text-slate-500 mb-2 uppercase tracking-tighter">Nazariya (Kya Dekha?)</label>
+                    <textarea id="visionInput" rows="2" class="w-full p-4 rounded-2xl border border-slate-100 bg-slate-50/50 focus:ring-2 focus:ring-slate-300 outline-none transition-all resize-none" placeholder="Duniya ko kis nazar se dekha..."></textarea>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-500 mb-2 uppercase tracking-tighter">Haqeeqat (Kya Jiya?)</label>
+                    <textarea id="experienceInput" rows="2" class="w-full p-4 rounded-2xl border border-slate-100 bg-slate-50/50 focus:ring-2 focus:ring-slate-300 outline-none transition-all resize-none" placeholder="Wo pal jo soch se bada tha..."></textarea>
+                </div>
+                <button onclick="saveEntry()" class="w-full bg-slate-900 text-white py-4 rounded-2xl hover:bg-black transition-all font-semibold shadow-lg active:scale-[0.98]">
+                    Safar Mein Shamil Karein
+                </button>
+            </div>
+        </div>
+
+       
+        <div id="entriesContainer" class="space-y-6">
+          
+        </div>
+
+     
+        <footer class="pt-12 pb-8 text-center">
+            <div class="h-px w-24 bg-slate-200 mx-auto mb-6"></div>
+            <p class="italic text-slate-400 font-light serif-font">
+                "Zindagi sochne ke liye nahi, mehsoos karne ke liye hai."
+            </p>
+        </footer>
+    </main>
+
+    <script>
+        let entries = [];
+
+        function saveEntry() {
+            const vision = document.getElementById('visionInput').value.trim();
+            const experience = document.getElementById('experienceInput').value.trim();
+
+            if (!vision && !experience) {
+                return;
+            }
+
+            const entry = {
+                id: Date.now(),
+                date: new Date().toLocaleDateString('hi-IN', { day: 'numeric', month: 'long', year: 'numeric' }),
+                vision: vision,
+                experience: experience
+            };
+
+            entries.unshift(entry);
+            renderEntries();
+
+            // Clear inputs
+            document.getElementById('visionInput').value = '';
+            document.getElementById('experienceInput').value = '';
+        }
+
+        function renderEntries() {
+            const container = document.getElementById('entriesContainer');
+            container.innerHTML = '';
+
+            entries.forEach(entry => {
+                const entryHtml = `
+                    <div class="glass-card p-7 rounded-3xl shadow-sm border-l-8 border-slate-900 animate-in fade-in slide-in-from-bottom-4 duration-700">
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">${entry.date}</span>
+                        </div>
+                        <div class="space-y-4">
+                            ${entry.vision ? `
+                                <div class="relative pl-4">
+                                    <div class="absolute left-0 top-0 bottom-0 w-0.5 bg-slate-100"></div>
+                                    <p class="text-sm text-slate-400 italic mb-1 uppercase tracking-tighter">Nazariya</p>
+                                    <p class="text-slate-600 leading-relaxed">${entry.vision}</p>
+                                </div>` : ''}
+                            ${entry.experience ? `
+                                <div class="bg-slate-50 p-4 rounded-2xl">
+                                    <p class="text-sm text-slate-400 italic mb-1 uppercase tracking-tighter">Haqeeqat</p>
+                                    <p class="text-slate-900 font-medium text-lg serif-font leading-snug">"${entry.experience}"</p>
+                                </div>` : ''}
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += entryHtml;
+            });
+        }
+
+        window.onload = () => {
+            console.log("Ehsaas App Started - Created by Bikku Kushwaha");
+        };
+    </script>
+</body>
+</html>
